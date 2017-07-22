@@ -437,6 +437,7 @@
 		D2B708CF1F21CDA100915852 /* LLFriendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B708CE1F21CDA100915852 /* LLFriendModel.m */; };
 		D2B708D21F21E14700915852 /* LLMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B708D11F21E14700915852 /* LLMessageCell.m */; };
 		D2B708D51F21EDD900915852 /* LLPictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B708D41F21EDD900915852 /* LLPictureView.m */; };
+		D2B708D81F220B9D00915852 /* LLCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B708D71F220B9D00915852 /* LLCommentCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1006,6 +1007,8 @@
 		D2B708D11F21E14700915852 /* LLMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLMessageCell.m; sourceTree = "<group>"; };
 		D2B708D31F21EDD900915852 /* LLPictureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLPictureView.h; sourceTree = "<group>"; };
 		D2B708D41F21EDD900915852 /* LLPictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLPictureView.m; sourceTree = "<group>"; };
+		D2B708D61F220B9D00915852 /* LLCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLCommentCell.h; sourceTree = "<group>"; };
+		D2B708D71F220B9D00915852 /* LLCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLCommentCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1106,6 +1109,8 @@
 				D2B708D11F21E14700915852 /* LLMessageCell.m */,
 				D2B708D31F21EDD900915852 /* LLPictureView.h */,
 				D2B708D41F21EDD900915852 /* LLPictureView.m */,
+				D2B708D61F220B9D00915852 /* LLCommentCell.h */,
+				D2B708D71F220B9D00915852 /* LLCommentCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -3226,6 +3231,7 @@
 			files = (
 				D2B7082C1F21C72E00915852 /* SDWebImageDownloaderOperation.m in Sources */,
 				D2B7080D1F21C72E00915852 /* MJRefreshComponent.m in Sources */,
+				D2B708D81F220B9D00915852 /* LLCommentCell.m in Sources */,
 				D2B708181F21C72E00915852 /* MJRefreshStateHeader.m in Sources */,
 				D2B708041F21C72E00915852 /* MASViewConstraint.m in Sources */,
 				D2B708171F21C72E00915852 /* MJRefreshNormalHeader.m in Sources */,

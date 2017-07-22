@@ -40,6 +40,7 @@
 }
 
 
+
 -(instancetype)initWithDic:(NSDictionary *)dic{
     self = [super init];
     if (self) {

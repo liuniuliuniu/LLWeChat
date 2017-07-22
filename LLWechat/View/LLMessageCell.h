@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "LLPictureView.h"
+#import "LLCommentCell.h"
 
 @class LLMessageCell;
 @class LLMessageModel;
@@ -15,6 +16,8 @@
 @protocol LLMessageCellDelegate <NSObject>
 
 - (void)reloadCellHeightForModel:(LLMessageModel *)model atIndexPath:(NSIndexPath *)indexPath;
+
+- (void)passCellHeight:(CGFloat )cellHeight commentModel:(LLCommentModel *)commentModel   commentCell:(LLCommentCell *)commentCell messageCell:(LLMessageCell *)messageCell;
 
 @end
 

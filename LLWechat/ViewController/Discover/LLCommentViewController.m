@@ -100,9 +100,8 @@
     __weak __typeof(window) weakWindow= window;
     
     __block LLMessageModel *model = [self.dataSource objectAtIndex:indexPath.row];
-    
     [cell configCellWithModel:model indexPath:indexPath];
-    
+    cell.backgroundColor = [UIColor whiteColor];
     
     cell.MoreBtnClickBlock = ^(UIButton *moreBtn,NSIndexPath * indexPath)
     {
@@ -118,6 +117,28 @@
         [weakTable reloadData];
                 
     };
+    
+    
+    //评论
+    cell.CommentBtnClickBlock = ^(UIButton *commentBtn,NSIndexPath * indexPath)
+    {
+        
+        if (self.isShowKeyBoard) {
+            [self.view endEditing:YES];
+            return ;
+        }
+        
+        //不是点击cell进行回复，则置空replayTheSeletedCellModel，因为这个时候是点击评论按钮进行评论，不是回复某某某
+        self.replyTheSelectedCellModel = nil;
+        weakSelf.seletedCellHeight = 0.0;
+        weakSelf.needUpdateOffset = YES;
+        weakSelf.chatKeyBoard.placeHolder = [NSString stringWithFormat:@"评论 %@",model.userName];
+        weakSelf.history_Y_offset = [commentBtn convertRect:commentBtn.bounds toView:weakWindow].origin.y;
+        weakSelf.currentIndexPath = indexPath;
+        [weakSelf.chatKeyBoard keyboardUpforComment];
+    };
+    
+
     
     
     //点击九宫格
@@ -168,6 +189,34 @@
     return h;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (self.isShowKeyBoard) {
+        [self.view endEditing:YES];
+    }
+}
+
+
+#pragma mark - passCellHeightWithModel
+-(void)passCellHeight:(CGFloat)cellHeight commentModel:(LLCommentModel *)commentModel commentCell:(LLCommentCell *)commentCell messageCell:(LLMessageCell *)messageCell{
+    if (self.isShowKeyBoard) {
+        [self.view endEditing:YES];
+        return ;
+    }
+    self.needUpdateOffset = YES;
+    self.replyTheSelectedCellModel = commentModel;
+    self.currentIndexPath = [self.tableView indexPathForCell:messageCell];
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    self.chatKeyBoard.placeHolder = [NSString stringWithFormat:@"回复 %@",commentModel.commentUserName];
+    self.history_Y_offset = [commentCell convertRect:commentCell.bounds toView:window].origin.y;
+    self.seletedCellHeight = cellHeight;
+    [self.chatKeyBoard keyboardUpforComment];
+}
+
+- (void)reloadCellHeightForModel:(LLMessageModel *)model atIndexPath:(NSIndexPath *)indexPath{
+    model.shouldUpdateCache = YES;
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
 
 
 
@@ -192,7 +241,6 @@
     return @[item1];
     
 }
-
 
 - (NSArray<FaceThemeModel *> *)chatKeyBoardFacePanelSubjectItems
 {
@@ -224,7 +272,7 @@
     
     //创建一个新的CommentModel,并给相应的属性赋值，然后加到评论数组的最后，reloadData
     LLCommentModel *commentModel = [[LLCommentModel alloc]init];
-    commentModel.commentUserName = @"文明";
+    commentModel.commentUserName = @"奥卡姆剃须刀";
     commentModel.commentUserId = @"274";
     commentModel.commentPhoto = @"http://q.qlogo.cn/qqapp/1104706859/189AA89FAADD207E76D066059F924AE0/100";
     commentModel.commentByUserName = self.replyTheSelectedCellModel?self.replyTheSelectedCellModel.commentUserName:@"";
@@ -233,7 +281,7 @@
     [messageModel.commentModelArray addObject:commentModel];
     
     messageModel.shouldUpdateCache = YES;
-//    [self reloadCellHeightForModel:messageModel atIndexPath:self.currentIndexPath];
+    [self reloadCellHeightForModel:messageModel atIndexPath:self.currentIndexPath];
     [self.chatKeyBoard keyboardDownForComment];
     self.chatKeyBoard.placeHolder = nil;
     
@@ -249,6 +297,56 @@
     NSLog(@"%@",chatKeyBoard);
     
 }
+
+#pragma mark keyboardWillShow
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    self.isShowKeyBoard = YES;
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    __block  CGFloat keyboardHeight = [aValue CGRectValue].size.height;
+    if (keyboardHeight==0) {
+        //解决搜狗输入法三次调用此方法的bug、
+        //        IOS8.0之后可以安装第三方键盘，如搜狗输入法之类的。
+        //        获得的高度都为0.这是因为键盘弹出的方法:- (void)keyBoardWillShow:(NSNotification *)notification需要执行三次,你如果打印一下,你会发现键盘高度为:第一次:0;第二次:216:第三次:282.并不是获取不到高度,而是第三次才获取真正的高度.
+        return;
+    }
+    CGRect keyboardRect = [aValue CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    CGFloat keyboardTop = keyboardRect.origin.y;
+    CGRect newTextViewFrame = self.view.bounds;
+    newTextViewFrame.size.height = keyboardTop - self.view.bounds.origin.y;
+    
+    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval animationDuration;
+    [animationDurationValue getValue:&animationDuration];
+    CGFloat delta = 0.0;
+    if (self.seletedCellHeight){//点击某行，进行回复某人
+        delta = self.history_Y_offset - ([UIApplication sharedApplication].keyWindow.bounds.size.height - keyboardHeight-self.seletedCellHeight-kChatToolBarHeight);
+    }else{//点击评论按钮
+        delta = self.history_Y_offset - ([UIApplication sharedApplication].keyWindow.bounds.size.height - keyboardHeight-kChatToolBarHeight-24-10);//24为评论按钮高度，10为评论按钮上部的5加评论按钮下部的5
+    }
+    CGPoint offset = self.tableView.contentOffset;
+    offset.y += delta;
+    if (offset.y < 0) {
+        offset.y = 0;
+    }
+    if (self.needUpdateOffset) {
+        [self.tableView setContentOffset:offset animated:YES];
+    }
+}
+#pragma mark
+#pragma mark keyboardWillHide
+- (void)keyboardWillHide:(NSNotification *)notification {
+    self.isShowKeyBoard = NO;
+    self.needUpdateOffset = NO;
+}
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    NSLog(@"CommentViewController dealloc");
+}
+
+
 
 
 @end
