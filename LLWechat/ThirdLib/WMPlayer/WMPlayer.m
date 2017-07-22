@@ -814,7 +814,6 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 }
 #pragma  mark - 定时器
 -(void)initTimer{
-    double interval = .1f;
     CMTime playerDuration = [self playerItemDuration];
     if (CMTIME_IS_INVALID(playerDuration))
     {
@@ -823,8 +822,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     double duration = CMTimeGetSeconds(playerDuration);
     if (isfinite(duration))
     {
-        CGFloat width = CGRectGetWidth([self.progressSlider bounds]);
-        interval = 0.5f * duration / width;
+        CGFloat width = CGRectGetWidth([self.progressSlider bounds]);        
     }
     __weak typeof(self) weakSelf = self;
     self.playbackTimeObserver =  [weakSelf.player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0, NSEC_PER_SEC)  queue:dispatch_get_main_queue() /* If you pass NULL, the main queue is used. */

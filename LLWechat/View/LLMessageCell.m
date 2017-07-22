@@ -9,12 +9,13 @@
 #import "LLMessageCell.h"
 #import "LLMessageModel.h"
 #import "WMPlayer.h"
+#import "LLCopyLabel.h"
 
 @interface LLMessageCell ()<UITableViewDelegate,UITableViewDataSource>
 
 
 @property (nonatomic, strong) UILabel *nameLabel;
-@property (nonatomic, strong) UILabel *descLabel;
+@property (nonatomic, strong) LLCopyLabel *descLabel;
 @property (nonatomic, strong) UIImageView *headImageView;
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIButton *moreBtn;
@@ -62,10 +63,13 @@
         make.right.mas_equalTo(-kGAP);
     }];
     
-    self.descLabel = [UILabel new];
+    self.descLabel = [LLCopyLabel new];
     self.descLabel.backgroundColor = [UIColor whiteColor];
-    UITapGestureRecognizer *tapText = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapText:)];
-    [self.descLabel addGestureRecognizer:tapText];
+//    UITapGestureRecognizer *tapText = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapText:)];
+    
+    UIGestureRecognizer * longPressText = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
+    
+    [self.descLabel addGestureRecognizer:longPressText];
     [self.contentView addSubview:self.descLabel];
     self.descLabel.preferredMaxLayoutWidth = KScreenWidth - kGAP-kAvatar_Size ;
     
@@ -171,13 +175,6 @@
 }
 
 
-- (void)tapText:(UITapGestureRecognizer *)tap{
-    if (self.TapTextBlock) {
-        UILabel *descLabel = (UILabel *)tap.view;
-        self.TapTextBlock(descLabel);
-    }
-}
-
 - (void)commentAction:(UIButton *)sender{
     if (self.CommentBtnClickBlock) {
         self.CommentBtnClickBlock(sender,self.indexPath);
@@ -185,6 +182,25 @@
 }
 
 
+- (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer{
+    
+    if (recognizer.state == UIGestureRecognizerStateRecognized) {
+        [recognizer.view becomeFirstResponder];
+        
+        UILabel *lbl = (UILabel *)recognizer.view;
+        
+        lbl.backgroundColor = [UIColor lightGrayColor];
+        
+        UIMenuController *menuController = [UIMenuController sharedMenuController];
+        
+        // add a custom menu item
+        UIMenuItem *customItem = [[UIMenuItem alloc] initWithTitle:@"Custom" action:@selector(customAction:)];
+        menuController.menuItems = [NSArray arrayWithObject:customItem];
+        
+        [menuController setTargetRect:recognizer.view.frame inView:recognizer.view.superview];
+        [menuController setMenuVisible:YES animated:YES];        
+    }
+}
 
 - (void)configCellWithModel:(LLMessageModel *)model indexPath:(NSIndexPath *)indexPath {
     self.indexPath = indexPath;
@@ -209,7 +225,9 @@
     self.descLabel.highlighted = YES; //高亮状态是否打开
     self.descLabel.enabled = YES;//设置文字内容是否可变
     self.descLabel.userInteractionEnabled = YES;//设置标签是否忽略或移除用户交互。默认为NO
-            
+    
+    
+    
     NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13.0],NSParagraphStyleAttributeName:muStyle};
     
     CGFloat h = [model.message boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - kGAP-kAvatar_Size - 2*kGAP, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size.height+0.5;

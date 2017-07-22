@@ -438,6 +438,7 @@
 		D2B708D21F21E14700915852 /* LLMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B708D11F21E14700915852 /* LLMessageCell.m */; };
 		D2B708D51F21EDD900915852 /* LLPictureView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B708D41F21EDD900915852 /* LLPictureView.m */; };
 		D2B708D81F220B9D00915852 /* LLCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2B708D71F220B9D00915852 /* LLCommentCell.m */; };
+		D2EFCE3C1F22ED6D007C51F5 /* LLCopyLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D2EFCE3B1F22ED6D007C51F5 /* LLCopyLabel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -1009,6 +1010,8 @@
 		D2B708D41F21EDD900915852 /* LLPictureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLPictureView.m; sourceTree = "<group>"; };
 		D2B708D61F220B9D00915852 /* LLCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLCommentCell.h; sourceTree = "<group>"; };
 		D2B708D71F220B9D00915852 /* LLCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLCommentCell.m; sourceTree = "<group>"; };
+		D2EFCE3A1F22ED6D007C51F5 /* LLCopyLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLCopyLabel.h; sourceTree = "<group>"; };
+		D2EFCE3B1F22ED6D007C51F5 /* LLCopyLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLCopyLabel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1041,6 +1044,7 @@
 		D2B7044A1F21A6EC00915852 /* LLWechat */ = {
 			isa = PBXGroup;
 			children = (
+				D2EFCE361F22EAB2007C51F5 /* CustomUI */,
 				D2B7044E1F21A6EC00915852 /* AppDelegate.h */,
 				D2B7044F1F21A6EC00915852 /* AppDelegate.m */,
 				D2B704651F21A7A300915852 /* ViewController */,
@@ -2852,6 +2856,15 @@
 			path = TimeLineImages;
 			sourceTree = "<group>";
 		};
+		D2EFCE361F22EAB2007C51F5 /* CustomUI */ = {
+			isa = PBXGroup;
+			children = (
+				D2EFCE3A1F22ED6D007C51F5 /* LLCopyLabel.h */,
+				D2EFCE3B1F22ED6D007C51F5 /* LLCopyLabel.m */,
+			);
+			path = CustomUI;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3268,6 +3281,7 @@
 				D2B708CF1F21CDA100915852 /* LLFriendModel.m in Sources */,
 				D2B706EF1F21C72E00915852 /* NSString+Emoji.m in Sources */,
 				D2B706F01F21C72E00915852 /* ChatKeyBoard.m in Sources */,
+				D2EFCE3C1F22ED6D007C51F5 /* LLCopyLabel.m in Sources */,
 				D2B7085B1F21C72E00915852 /* YYWeakProxy.m in Sources */,
 				D2B708D51F21EDD900915852 /* LLPictureView.m in Sources */,
 				D2B7080E1F21C72E00915852 /* MJRefreshFooter.m in Sources */,

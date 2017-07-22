@@ -149,20 +149,7 @@
         }
         [weakSelf.chatKeyBoard keyboardDownForComment];
     };
-    
-    
-    
-    //点击文字
-    cell.TapTextBlock=^(UILabel *desLabel){
-        if (self.isShowKeyBoard) {
-            [self.view endEditing:YES];
-            return ;
-        }
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:nil message:desLabel.text delegate:weakSelf cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-        [alert show];
-    };
-        
-    
+     
     return cell;
 }
 
@@ -198,6 +185,7 @@
 
 #pragma mark - passCellHeightWithModel
 -(void)passCellHeight:(CGFloat)cellHeight commentModel:(LLCommentModel *)commentModel commentCell:(LLCommentCell *)commentCell messageCell:(LLMessageCell *)messageCell{
+    
     if (self.isShowKeyBoard) {
         [self.view endEditing:YES];
         return ;
@@ -344,6 +332,7 @@
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     NSLog(@"CommentViewController dealloc");
+    
 }
 
 
